@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact | The Detail Standard</title>
+  <meta name="description" content="Contact The Detail Standard. Send us a message and we’ll get back to you." />
+  <meta name="theme-color" content="#0B0D12" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header class="header">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="Home">
+        <span class="brand__mark">◆</span>
+        <span class="brand__name">The Detail Standard</span>
+      </a>
+
+      <nav class="links" aria-label="Primary navigation">
+        <a href="index.html#services">Services</a>
+        <a href="index.html#detailing">What is detailing?</a>
+        <a href="index.html#process">How it works</a>
+        <a class="btn btn--ghost" href="index.html#book">Book a visit</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="section">
+      <div class="container">
+        <h1>Contact us</h1>
+        <p class="muted">
+          Send us a message and we’ll respond as soon as possible. If you’d prefer email, use
+          <a href="mailto:hello@thedetailstandard.co.uk">hello@thedetailstandard.co.uk</a>.
+        </p>
+
+        <div class="embed">
+          <form id="contactForm" class="form">
+            <div class="form__grid">
+              <label class="field">
+                <span>Name</span>
+                <input type="text" name="name" autocomplete="name" required>
+              </label>
+
+              <label class="field">
+                <span>Email</span>
+                <input type="email" name="email" autocomplete="email" required>
+              </label>
+
+              <label class="field field--full">
+                <span>Message</span>
+                <textarea name="message" rows="7" required></textarea>
+              </label>
+
+              <!-- Honeypot (hidden). Bots often fill this -->
+              <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off">
+
+              <div class="field field--full">
+                <button class="btn" type="submit">Send message</button>
+                <p id="status" class="fineprint" aria-live="polite"></p>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <p class="fineprint">
+          For urgent enquiries, email:
+          <a href="mailto:hello@thedetailstandard.co.uk">hello@thedetailstandard.co.uk</a>
+        </p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div>
+          <p class="brand brand--footer"><span class="brand__mark">◆</span> The Detail Standard</p>
+          <p class="muted">Detailing beyond the surface. Cleaning the dirt you can’t see.</p>
+          <p class="fineprint">Email: <a href="mailto:hello@thedetailstandard.co.uk">hello@thedetailstandard.co.uk</a></p>
+        </div>
+
+        <div class="footer__links">
+          <a href="index.html#services">Services</a>
+          <a href="index.html#detailing">What is detailing?</a>
+          <a href="contact.html">Contact</a>
+          <a href="index.html#book">Book a visit</a>
+        </div>
+
+        <div class="footer__small muted">
+          <p>© <span id="year"></span> The Detail Standard. All rights reserved.</p>
+        </div>
+      </div>
+
+      <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+      </script>
+    </footer>
+  </main>
+
+  <script>
+    // Paste your Apps Script Web App URL here
+    const ENDPOINT = "https://script.google.com/macros/s/AKfycbxovALRsbRrRP0_aJRJ_i0Cor7pvNkdtawR_rsHSmjs9JBRttDbnY0959j_18-Rf3yB/exec";
+
+    const form = document.getElementById("contactForm");
+    const statusEl = document.getElementById("status");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      statusEl.textContent = "Sending…";
+
+      const formData = new FormData(form);
+
+      // Honeypot check
+      if ((formData.get("website") || "").trim() !== "") {
+        statusEl.textContent = "Thanks! Your message has been sent.";
+        form.reset();
+        return;
+      }
+
+      const payload = {
+        name: formData.get("name"),
+        email: formData.get("email"),
+        message: formData.get("message"),
+      };
+
+      try {
+        const res = await fetch(ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload),
+        });
+
+        const out = await res.json();
+
+        if (out.ok) {
+          statusEl.textContent = "Thanks! Your message has been sent.";
+          form.reset();
+        } else {
+          statusEl.textContent = "Sorry — something went wrong. Please try again.";
+          console.error(out);
+        }
+      } catch (err) {
+        statusEl.textContent = "Network error — please try again.";
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
