@@ -191,7 +191,7 @@ a:hover{ text-decoration:underline; }
   opacity: .9;
   pointer-events: none;
 }
-.s1{ top: 22%; left: 10%; }
+.s1{ top: 120px; left: 151px; }
 .s2{ top: 18%; right: 14%; width: 12px; height: 12px; }
 .s3{ bottom: 18%; right: 22%; width: 8px; height: 8px; opacity: .75; }
 
